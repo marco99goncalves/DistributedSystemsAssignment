@@ -85,9 +85,9 @@ public class Peer {
                                                                        // in the totally ordered multicast algorithm
 
     public static AtomicInteger CLOCK; // Lamport Clock
-    // public static ReentrantLock QUEUE_LOCK; // Lock for the Message queue
     public static String HOST; // Our current host name
     public static int PORT; // Our current port number
+    public static int TIME_TO_WAIT;
 
     Logger logger;
 
@@ -125,6 +125,7 @@ public class Peer {
 
         WORD_LAMBDA = Integer.parseInt(prop.getProperty("WORD_LAMBDA"));
         WORD_FILE = prop.getProperty("WORD_FILE");
+        TIME_TO_WAIT = Integer.parseInt(prop.getProperty("TIME_TO_WAIT"));
     }
 
     /**
@@ -172,7 +173,7 @@ public class Peer {
 
         new Thread(new Server(HOST, PORT, peer.logger)).start();
 
-        Thread.sleep(500);
+        Thread.sleep(TIME_TO_WAIT);
 
         new Thread(new WordGenerator(WORD_LAMBDA)).start();
     }

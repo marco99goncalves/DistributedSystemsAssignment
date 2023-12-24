@@ -43,7 +43,6 @@ class Pair<T, E> {
     }
 }
 
-
 /**
  * Represents a Peer node in a Peer to Peer network
  */
@@ -58,9 +57,9 @@ public class Peer {
     public static TreeSet<String> words;
     public static ReentrantLock word_lock;
     public static int SEED;
+    public static int TIME_TO_WAIT;
     String host;
     Logger logger;
-
 
     public Peer(String hostname) {
         host = hostname;
@@ -78,7 +77,8 @@ public class Peer {
 
     /**
      * @param file The file containing the properties
-     * @throws IOException Throws an IOException whenever it can't read a file and/or a property
+     * @throws IOException Throws an IOException whenever it can't read a file
+     *                     and/or a property
      */
     public static void ReadConfigurationFileProp(String file) throws IOException {
         Properties prop = new Properties();
@@ -87,7 +87,7 @@ public class Peer {
 
         // Retrieving values
         int MACHINES = Integer.parseInt(prop.getProperty("MACHINES"));
-        for(int i = 1; i <= MACHINES; i++){
+        for (int i = 1; i <= MACHINES; i++) {
             String machine = "m" + i;
             String machine_host = prop.getProperty("MACHINES." + machine + ".HOST");
             int machine_port = Integer.parseInt(prop.getProperty("MACHINES." + machine + ".PORT"));
@@ -97,10 +97,12 @@ public class Peer {
         WORD_LAMBDA = Integer.parseInt(prop.getProperty("WORD_LAMBDA"));
         PUSH_PULL_LAMBDA = Integer.parseInt(prop.getProperty("PUSH_PULL_LAMBDA"));
         WORD_FILE = prop.getProperty("WORD_FILE");
+        TIME_TO_WAIT = Integer.parseInt(prop.getProperty("TIME_TO_WAIT"));
     }
 
     /**
-     * Reads the file stored in WORD_FILE and then places its trimmed contents into the WORDS_ARRAY
+     * Reads the file stored in WORD_FILE and then places its trimmed contents into
+     * the WORDS_ARRAY
      */
     public static void SetupWords() {
         try (BufferedReader br = new BufferedReader(new FileReader(WORD_FILE))) {
@@ -112,7 +114,7 @@ public class Peer {
             e.printStackTrace();
         }
 
-        for(String s : words){
+        for (String s : words) {
             System.out.println(s);
         }
     }
@@ -125,7 +127,7 @@ public class Peer {
 
         // Setup the connections
         TARGETS = new ArrayList<>();
-        for (int i = 1; i < args.length; i++){
+        for (int i = 1; i < args.length; i++) {
             TARGETS.add(MACHINE_TO_IP.get(args[i]));
         }
 
@@ -139,7 +141,7 @@ public class Peer {
 
         new Thread(new Server(host, port, peer.logger)).start();
 
-        Thread.sleep(500);
+        Thread.sleep(TIME_TO_WAIT);
 
         SEED = new Random().nextInt();
         new Thread(new WordGenerator(WORD_LAMBDA, SEED)).start();
@@ -184,7 +186,8 @@ class Server implements Runnable {
 }
 
 /**
- * Represents a connection with another peer. This class is called whenever another peer connects to us via the Server class
+ * Represents a connection with another peer. This class is called whenever
+ * another peer connects to us via the Server class
  */
 class Connection implements Runnable {
     String clientAddress;
@@ -212,14 +215,14 @@ class Connection implements Runnable {
             TreeSet<String> set_gotten = (TreeSet<String>) objectInputStream.readObject();
 
             Peer.word_lock.lock();
-            try{
+            try {
                 Peer.words.addAll(set_gotten);
 
                 OutputStream outputStream = clientSocket.getOutputStream();
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
                 objectOutputStream.writeObject(Peer.words);
-            }finally {
+            } finally {
                 Peer.word_lock.unlock();
             }
             /*
@@ -240,6 +243,7 @@ class WordGenerator implements Runnable {
     PoissonProcess pp;
     int seed;
     Random random;
+
     public WordGenerator(int lambda, int seed) {
         this.seed = seed;
         pp = new PoissonProcess(lambda, new Random(seed));
@@ -252,9 +256,9 @@ class WordGenerator implements Runnable {
             String word = Peer.WORDS_ARRAY.get(random.nextInt(Peer.WORDS_ARRAY.size()));
 
             Peer.word_lock.lock();
-            try{
+            try {
                 Peer.words.add(word);
-            }finally{
+            } finally {
                 Peer.word_lock.unlock();
             }
 
@@ -277,20 +281,21 @@ class PushPullGenerator implements Runnable {
     PoissonProcess pp;
     int seed;
     Random random;
+
     public PushPullGenerator(int lambda, int seed) {
         this.seed = seed;
         random = new Random(seed);
         pp = new PoissonProcess(lambda, new Random(seed));
     }
 
-    public int RandomInRange(Random random, int min, int max){
-            return (min + random.nextInt(max - min + 1));
+    public int RandomInRange(Random random, int min, int max) {
+        return (min + random.nextInt(max - min + 1));
     }
 
     @Override
-    public void run(){
-        while(true){
-            Pair<String, Integer> target = Peer.TARGETS.get(RandomInRange(random, 0, Peer.TARGETS.size()-1));
+    public void run() {
+        while (true) {
+            Pair<String, Integer> target = Peer.TARGETS.get(RandomInRange(random, 0, Peer.TARGETS.size() - 1));
 
             try {
                 Socket peerSocket = new Socket(InetAddress.getByName(target.getKey()), target.getValue());
@@ -299,11 +304,11 @@ class PushPullGenerator implements Runnable {
                 ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream);
 
                 Peer.word_lock.lock();
-                try{
+                try {
                     objectOutputStream.writeObject(Peer.words);
                 } catch (Exception e) {
                     e.printStackTrace();
-                } finally{
+                } finally {
                     Peer.word_lock.unlock();
                 }
 
@@ -322,14 +327,10 @@ class PushPullGenerator implements Runnable {
 
                 peerSocket.close();
 
-
-
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new RuntimeException(e);
             }
-
-
 
             double t_sleep = pp.timeForNextEvent() * 60 * 1000;
             try {
@@ -340,4 +341,3 @@ class PushPullGenerator implements Runnable {
         }
     }
 }
-
