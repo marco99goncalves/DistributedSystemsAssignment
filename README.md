@@ -7,6 +7,7 @@ Before running any code, place yourself in the directorys `DistributedSystemsAsi
 
 # Basic usage of the Peer class
 Whenever you run a given Peer (regardless of the algorithm used), the common sintax is as follows:
+
 `java ds.assign.[ring/entropy/chat].Peer [Current Peer] [Peers to connect]`
 
 For example, an example would be:
@@ -27,9 +28,11 @@ javac ServerInjector.java
 ```
 
 After running this, we need to start the main server, by running the command:
-`java ds.examples.sockets.calculatormulti.Server [SERVER_HOST] [SERVER_PORT]` replacing `[SERVER_HOST` and `[SERVER_PORT]` with the values you set in the `conf_ring.prop` file. 
+
+`java ds.examples.sockets.calculatormulti.Server [SERVER_HOST] [SERVER_PORT]` replacing `[SERVER_HOST]` and `[SERVER_PORT]` with the values you set in the `conf_ring.prop` file. 
 
 Now that the server is initiated, we start the Peers. For this, create a new terminal for each peer you want to run, and then, on each window, run the following command:
+
 `java ds.assign.ring.Peer [Current Peer] [Next Peer]`
 
 Here is an example for a ring of 3 peers:
@@ -40,7 +43,9 @@ Here is an example for a ring of 3 peers:
 ``` 
 
 After running the command, each peer is ready to start passing the token, for this, run the following command:
+
 `java ServerInjector [Target Peer Host] [Target Peer Port]`
+
 This sends a token request to the peer at the given location, and starts the process.
 
 # Anti-Entropy
@@ -53,6 +58,7 @@ The entropy files are stored in `ds/assign/entropy`. To compile them, run:
 After compiling, we're ready to start the peers.
 
 For this, create a new terminal for each peer you want to run, and then, on each window, run the following command:
+
 `java ds.assign.entropy.Peer [Current Peer] [Target Peers]`
 
 Here is an example for a ring of 4 peers:
@@ -73,6 +79,7 @@ The tom files are stored in `ds/assign/chat`. To compile them, run:
 After compiling, we're ready to start the peers.
 
 For this, create a new terminal for each peer you want to run, and then, on each window, run the following command:
+
 `java ds.assign.chat.Peer [Current Peer] [Target Peers]`
 
 Here is an example for a ring of 4 peers:
