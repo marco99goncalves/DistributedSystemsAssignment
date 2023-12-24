@@ -1,0 +1,43 @@
+{
+    "SERVER": [
+        "localhost",
+        40000
+    ],
+    "MACHINES": {
+        "m1": [
+            "localhost",
+            40001
+        ],
+        "m2": [
+            "localhost",
+            40002
+        ],
+        "m3": [
+            "localhost",
+            40003
+        ],
+        "m4": [
+            "localhost",
+            40004
+        ],
+        "m5": [
+            "localhost",
+            40005
+        ],
+        "m6": [
+            "localhost",
+            40006
+        ],
+        "m7": [
+            "localhost",
+            40007
+        ],
+        "m8": [
+            "localhost",
+            40008
+        ]
+    },
+    "WORD_LAMBDA": 12,
+    "PUSH_PULL_LAMBDA": 10,
+    "WORD_FILE": "something-file"
+}
