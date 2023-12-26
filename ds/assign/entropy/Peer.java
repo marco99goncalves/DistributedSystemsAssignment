@@ -58,7 +58,9 @@ public class Peer {
     public static ReentrantLock word_lock;
     public static int SEED;
     public static int TIME_TO_WAIT;
-    String host;
+    public static int CONN_COUNT;
+    public static String host;
+    public static int port;
     Logger logger;
 
     public Peer(String hostname) {
@@ -131,8 +133,10 @@ public class Peer {
             TARGETS.add(MACHINE_TO_IP.get(args[i]));
         }
 
-        String host = MACHINE_TO_IP.get(args[0]).getKey();
-        int port = MACHINE_TO_IP.get(args[0]).getValue();
+        CONN_COUNT = 0;
+
+        host = MACHINE_TO_IP.get(args[0]).getKey();
+        port = MACHINE_TO_IP.get(args[0]).getValue();
 
         word_lock = new ReentrantLock();
         words = new TreeSet<>();
@@ -198,6 +202,7 @@ class Connection implements Runnable {
         this.clientAddress = clientAddress;
         this.clientSocket = clientSocket;
         this.logger = logger;
+        Peer.CONN_COUNT++;
     }
 
     @Override
@@ -223,12 +228,19 @@ class Connection implements Runnable {
 
                 objectOutputStream.writeObject(Peer.words);
             } finally {
+                System.out.println("\n==========\n");
+                Peer.words.forEach(s -> System.out.print(s + " "));
+                System.out.println("\n==========\n");
+
                 Peer.word_lock.unlock();
             }
             /*
              * close connection
              */
             clientSocket.close();
+
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -253,10 +265,10 @@ class WordGenerator implements Runnable {
     @Override
     public void run() {
         while (true) {
-            String word = Peer.WORDS_ARRAY.get(random.nextInt(Peer.WORDS_ARRAY.size()));
-
+            String word = /*Peer.port%10 + */Peer.WORDS_ARRAY.get(random.nextInt(Peer.WORDS_ARRAY.size()));
             Peer.word_lock.lock();
             try {
+                //System.out.println("Generated: " + word);
                 Peer.words.add(word);
             } finally {
                 Peer.word_lock.unlock();
@@ -298,6 +310,7 @@ class PushPullGenerator implements Runnable {
             Pair<String, Integer> target = Peer.TARGETS.get(RandomInRange(random, 0, Peer.TARGETS.size() - 1));
 
             try {
+                //System.out.println("PushPull with: " + target.getValue()%10);
                 Socket peerSocket = new Socket(InetAddress.getByName(target.getKey()), target.getValue());
 
                 OutputStream outputStream = peerSocket.getOutputStream();
@@ -319,13 +332,14 @@ class PushPullGenerator implements Runnable {
                 Peer.word_lock.lock();
                 Peer.words.addAll(set_gotten);
 
-                System.out.println();
-                Peer.words.forEach(s -> System.out.print(s + " "));
-                System.out.println();
-
-                Peer.word_lock.unlock();
 
                 peerSocket.close();
+
+                System.out.println("\n==========\n");
+                Peer.words.forEach(s -> System.out.print(s + " "));
+                System.out.println("\n==========\n");
+
+                Peer.word_lock.unlock();
 
             } catch (Exception e) {
                 e.printStackTrace();
