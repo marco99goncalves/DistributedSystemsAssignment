@@ -1,17 +1,27 @@
 package ds.assign.entropy;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Properties;
+import java.util.Random;
+import java.util.TreeSet;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Logger;
 import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import org.json.simple.JSONObject;
-import poisson.*;
+import poisson.PoissonProcess;
 
 /**
  * @param <T> First element of the pair
@@ -239,8 +249,6 @@ class Connection implements Runnable {
              */
             clientSocket.close();
 
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -265,10 +273,10 @@ class WordGenerator implements Runnable {
     @Override
     public void run() {
         while (true) {
-            String word = /*Peer.port%10 + */Peer.WORDS_ARRAY.get(random.nextInt(Peer.WORDS_ARRAY.size()));
+            String word = /* Peer.port%10 + */Peer.WORDS_ARRAY.get(random.nextInt(Peer.WORDS_ARRAY.size()));
             Peer.word_lock.lock();
             try {
-                //System.out.println("Generated: " + word);
+                // System.out.println("Generated: " + word);
                 Peer.words.add(word);
             } finally {
                 Peer.word_lock.unlock();
@@ -310,7 +318,7 @@ class PushPullGenerator implements Runnable {
             Pair<String, Integer> target = Peer.TARGETS.get(RandomInRange(random, 0, Peer.TARGETS.size() - 1));
 
             try {
-                //System.out.println("PushPull with: " + target.getValue()%10);
+                // System.out.println("PushPull with: " + target.getValue()%10);
                 Socket peerSocket = new Socket(InetAddress.getByName(target.getKey()), target.getValue());
 
                 OutputStream outputStream = peerSocket.getOutputStream();
@@ -331,7 +339,6 @@ class PushPullGenerator implements Runnable {
 
                 Peer.word_lock.lock();
                 Peer.words.addAll(set_gotten);
-
 
                 peerSocket.close();
 

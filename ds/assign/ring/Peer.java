@@ -1,17 +1,22 @@
 package ds.assign.ring;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Properties;
+import java.util.Random;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.logging.Logger;
 import java.util.logging.FileHandler;
-import java.util.logging.LoggingPermission;
+import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import poisson.*;
+import poisson.PoissonProcess;
 
 /**
  * @param <T> First element of the pair
@@ -155,7 +160,7 @@ class Server implements Runnable {
 
     /**
      * Function that sends an operation to the server, and receives it's result
-     * 
+     *
      * @param operation Operation to be sent to the server
      */
     public static void SendReceiveMessage(String operation) {
@@ -211,7 +216,6 @@ class Connection implements Runnable {
          */
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
 
             String command;
             command = in.readLine();
@@ -227,7 +231,7 @@ class Connection implements Runnable {
                     Server.SendReceiveMessage(op);
                 }
                 Thread.sleep(1 * 1000); // Useless, we're just doing this so it's easier to see the token passing trough
-                                        // the peers
+                // the peers
 
                 Socket peerSocket = new Socket(InetAddress.getByName(Peer.TARGET_HOST), Peer.TARGET_PORT);
                 System.out.println("Sending token");
@@ -259,7 +263,7 @@ class Connection implements Runnable {
 class Client implements Runnable {
     Logger logger;
 
-    public static int OPERATION_LAMBDA; // Events per minute
+    public int OPERATION_LAMBDA; // Events per minute
 
     public Client(Logger logger, int OPERATION_LAMBDA) throws Exception {
         this.logger = logger;

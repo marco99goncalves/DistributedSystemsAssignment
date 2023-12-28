@@ -1,18 +1,29 @@
 package ds.assign.chat;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Properties;
+import java.util.Random;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.logging.Logger;
 import java.util.logging.FileHandler;
+import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-import poisson.*;
+import poisson.PoissonProcess;
 
 /**
  * @param <T> First element of the pair
@@ -75,14 +86,14 @@ public class Peer {
     public static int WORD_LAMBDA; // How many words we generate (on average) per minute
     public static String WORD_FILE; // File with the words we want to print
     public static ArrayList<String> WORDS_ARRAY; // Represents the same file as WORD_FILE, however, it's we can access a
-                                                 // random word in O(1)
+    // random word in O(1)
     public static ArrayList<Pair<String, Integer>> TARGETS; // Machines we are currently connected to
     public static HashMap<String, Pair<String, Integer>> MACHINE_TO_IP; // Dictionary to translate the machine name to a
-                                                                        // pair <HOST, PORT>, for example: m1:
-                                                                        // {"localhost", 4001}
+    // pair <HOST, PORT>, for example: m1:
+    // {"localhost", 4001}
 
     public static ConcurrentSkipListSet<LamportMessage> MESSAGE_QUEUE; // Messages received from other peers to be used
-                                                                       // in the totally ordered multicast algorithm
+    // in the totally ordered multicast algorithm
 
     public static AtomicInteger CLOCK; // Lamport Clock
     public static String HOST; // Our current host name
@@ -304,8 +315,7 @@ class WordGenerator implements Runnable {
     @Override
     public void run() {
         while (true) {
-            String word = /* Peer.port + " " + Peer.CLOCK + " " + Peer.MESSAGE_QUEUE.size() + ": " + */ Peer.WORDS_ARRAY
-                    .get(random.nextInt(Peer.WORDS_ARRAY.size()));
+            String word = Peer.WORDS_ARRAY.get(random.nextInt(Peer.WORDS_ARRAY.size()));
 
             // Send message with the word, including to ourselves
             Peer.CLOCK.incrementAndGet();
@@ -326,5 +336,4 @@ class WordGenerator implements Runnable {
             }
         }
     }
-
 }
