@@ -63,8 +63,6 @@ The entropy files are stored in `ds/assign/entropy`. To compile them, run:
 
 `javac ds/assign/entropy/Peer.java`
 
-**Before running the next step, make sure that you run all the commands to start the peers within the given `TIME_TO_WAIT` time window that is set in the `conf_entropy.prop` file. This tells the Peers to wait a given time (in milliseconds) before trying to start the process. If a targeted peer is not running, it will crash.**
-
 After compiling, we're ready to start the peers.
 
 For this, create a new terminal for each peer you want to run, and then, on each window, run the following command:
@@ -87,8 +85,6 @@ Here is an example for a ring of 4 peers:
 The tom files are stored in `ds/assign/chat`. To compile them, run:
 
 `javac ds/assign/chat/Peer.java`
-
-**Before running the next step, make sure that you run all the commands to start the peers within the given `TIME_TO_WAIT` time window that is set in the `conf_entropy.prop` file. This tells the Peers to wait a given time (in milliseconds) before trying to start the process. If a targeted peer is not running, it will crash.**
 
 After compiling, we're ready to start the peers.
 
