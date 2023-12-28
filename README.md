@@ -1,4 +1,3 @@
-
 # Distributed Systems Assignment
 
 This project implements three different algorithms for distributed systems: Token Ring, Anti-Entropy and Totally Ordered Multicast. This readme will guide you trough the usage of the programs.
@@ -6,6 +5,7 @@ This project implements three different algorithms for distributed systems: Toke
 Before running any code, place yourself in the directorys `DistributedSystemsAsignment`
 
 # Basic usage of the Peer class
+
 Whenever you run a given Peer (regardless of the algorithm used), the common sintax is as follows:
 
 `java ds.assign.[ring/entropy/chat].Peer [Current Peer] [Peers to connect]`
@@ -16,11 +16,13 @@ For example, an example would be:
 The above command would run the `Anti-Entropy` algorithm, and it would create peer `m3` and connect it to peers `m1, m4 and m5`.
 
 ### Property files
+
 Each algorithm has different property files stored on the `DistributedSystemsAsignment` directory. These files dictate the variables used in the program, and is, most importantly, used for setting the ports of the servers/peers. By default, Servers are located in `localhost` at port `40000` and peers are located in `localhost` starting in port `40001`.
 
-
 # Token Ring
+
 The token ring files are stored in `ds/assign/ring`. To compile them, run:
+
 ```
 javac ds/assign/ring/Peer.java
 javac ds/examples/sockets/calculatormulti/Server.java
@@ -29,18 +31,19 @@ javac ServerInjector.java
 
 After running this, we need to start the main server, by running the command:
 
-`java ds.examples.sockets.calculatormulti.Server [SERVER_HOST] [SERVER_PORT]` replacing `[SERVER_HOST]` and `[SERVER_PORT]` with the values you set in the `conf_ring.prop` file. 
+`java ds.examples.sockets.calculatormulti.Server [SERVER_HOST] [SERVER_PORT]` replacing `[SERVER_HOST]` and `[SERVER_PORT]` with the values you set in the `conf_ring.prop` file.
 
 Now that the server is initiated, we start the Peers. For this, create a new terminal for each peer you want to run, and then, on each window, run the following command:
 
 `java ds.assign.ring.Peer [Current Peer] [Next Peer]`
 
 Here is an example for a ring of 3 peers:
+
 ```
 [TERMINAL 1] java ds.assign.ring.Peer m1 m2
 [TERMINAL 2] java ds.assign.ring.Peer m2 m3
 [TERMINAL 3] java ds.assign.ring.Peer m3 m1
-``` 
+```
 
 After running the command, each peer is ready to start passing the token, for this, run the following command:
 
@@ -49,6 +52,7 @@ After running the command, each peer is ready to start passing the token, for th
 This sends a token request to the peer at the given location, and starts the process.
 
 # Anti-Entropy
+
 The entropy files are stored in `ds/assign/entropy`. To compile them, run:
 
 `javac ds/assign/entropy/Peer.java`
@@ -62,14 +66,16 @@ For this, create a new terminal for each peer you want to run, and then, on each
 `java ds.assign.entropy.Peer [Current Peer] [Target Peers]`
 
 Here is an example for a ring of 4 peers:
+
 ```
-[TERMINAL 1] java ds.assign.entropy.Peer m1 m2 m3 
+[TERMINAL 1] java ds.assign.entropy.Peer m1 m2 m3
 [TERMINAL 2] java ds.assign.entropy.Peer m2 m1
 [TERMINAL 3] java ds.assign.entropy.Peer m3 m1 m4
 [TERMINAL 4] java ds.assign.entropy.Peer m4 m3
-``` 
+```
 
 # Totally Ordered Multicast (TOM)
+
 The tom files are stored in `ds/assign/chat`. To compile them, run:
 
 `javac ds/assign/chat/Peer.java`
@@ -83,10 +89,10 @@ For this, create a new terminal for each peer you want to run, and then, on each
 `java ds.assign.chat.Peer [Current Peer] [Target Peers]`
 
 Here is an example for a ring of 4 peers:
+
 ```
 [TERMINAL 1] java ds.assign.chat.Peer m1 m2 m3 m4
 [TERMINAL 2] java ds.assign.chat.Peer m2 m1 m3 m4
 [TERMINAL 3] java ds.assign.chat.Peer m3 m1 m2 m4
 [TERMINAL 4] java ds.assign.chat.Peer m4 m1 m2 m3
-``` 
-
+```
