@@ -82,7 +82,7 @@ Here is an example for a ring of 4 peers:
 
 # Totally Ordered Multicast (TOM)
 
-The tom files are stored in `ds/assign/chat`. To compile them, run:
+The totally ordered multicast files are stored in `ds/assign/chat`. To compile them, run:
 
 `javac ds/assign/chat/Peer.java`
 
