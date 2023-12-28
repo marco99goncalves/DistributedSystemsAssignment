@@ -2,11 +2,11 @@
 
 This project implements three different algorithms for distributed systems: Token Ring, Anti-Entropy and Totally Ordered Multicast. This readme will guide you trough the usage of the programs.
 
-Before running any code, place yourself in the directorys `DistributedSystemsAsignment`
+Before running any code, place yourself in the directory `DistributedSystemsAssignment` you just downloaded from this repository.
 
 # Basic usage of the Peer class
 
-Whenever you run a given Peer (regardless of the algorithm used), the common sintax is as follows:
+Whenever you run a given Peer (regardless of the algorithm used), the common syntax is as follows:
 
 `java ds.assign.[ring/entropy/chat].Peer [Current Peer] [Peers to connect]`
 
