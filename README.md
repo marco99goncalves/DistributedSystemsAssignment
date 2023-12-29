@@ -69,7 +69,7 @@ For this, create a new terminal for each peer you want to run, and then, on each
 
 `java ds.assign.entropy.Peer [Current Peer] [Target Peers]`
 
-Here is an example for a ring of 4 peers:
+Here are the commands for the assignment input:
 
 ```
 [TERMINAL 1] java ds.assign.entropy.Peer m1 m2
@@ -92,7 +92,7 @@ For this, create a new terminal for each peer you want to run, and then, on each
 
 `java ds.assign.chat.Peer [Current Peer] [Target Peers]`
 
-Here is an example for a ring of 4 peers:
+Here are the commands for the assignment input:
 
 ```
 [TERMINAL 1] java ds.assign.chat.Peer m1 m2 m3 m4 m5 m6
