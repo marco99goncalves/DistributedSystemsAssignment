@@ -1,6 +1,6 @@
 # Distributed Systems Assignment
 
-This project implements three different algorithms for distributed systems: Token Ring, Anti-Entropy and Totally Ordered Multicast. This readme will guide you trough the usage of the programs.
+This project implements three different algorithms for distributed systems: Token Ring, Anti-Entropy and Totally Ordered Multicast. This README will guide you through the usage of the programs.
 
 Before running any code, place yourself in the directory `DistributedSystemsAssignment` you just downloaded from this repository.
 
@@ -21,7 +21,7 @@ Each algorithm has different property files stored on the `DistributedSystemsAsi
 
 ### ⚠️ Entropy and Totally Ordered Multicast ⚠️
 
-**Before starting each peer, make sure that you run all the commands to start the peers within the given `TIME_TO_WAIT` time window that is set in the correct `conf_*.prop` file. This tells the Peers to wait a given time (in milliseconds) before trying to start the process. If a targeted peer is not running, it will crash.**
+**Before starting each peer, make sure that you run all the commands to start the peers within the given `TIME_TO_WAIT` time window that is set in the correct `conf_*.prop` file. This tells the Peers to wait a given time (in milliseconds) before trying to start the process. If a targeted peer is not running, it will crash. Default waiting time is: 5 seconds**
 
 # Token Ring
 
