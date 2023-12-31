@@ -125,10 +125,12 @@ public class Peer {
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
 
-    for (String s : words) {
-      System.out.println(s);
-    }
+  public static void PrintWords() {
+    System.out.println("\n===== " + words.size() + " =====");
+    Peer.words.forEach(s -> System.out.print(s + " "));
+    System.out.println("\n==============\n");
   }
 
   public static void main(String[] args) throws Exception {
@@ -238,10 +240,7 @@ class Connection implements Runnable {
 
         objectOutputStream.writeObject(Peer.words);
       } finally {
-        System.out.println("\n==========\n");
-        Peer.words.forEach(s -> System.out.print(s + " "));
-        System.out.println("\n==========\n");
-
+        Peer.PrintWords();
         Peer.word_lock.unlock();
       }
       /*
@@ -342,9 +341,7 @@ class PushPullGenerator implements Runnable {
 
         peerSocket.close();
 
-        System.out.println("\n==========\n");
-        Peer.words.forEach(s -> System.out.print(s + " "));
-        System.out.println("\n==========\n");
+        Peer.PrintWords();
 
         Peer.word_lock.unlock();
 
