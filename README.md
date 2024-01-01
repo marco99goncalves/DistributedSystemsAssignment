@@ -35,7 +35,9 @@ javac ServerInjector.java
 
 After running this, we need to start the main server, by running the command:
 
-`java ds.examples.sockets.calculatormulti.Server [SERVER_HOST] [SERVER_PORT]` replacing `[SERVER_HOST]` and `[SERVER_PORT]` with the values you set in the `conf_ring.prop` file.
+`java ds.examples.sockets.calculatormulti.Server [SERVER_HOST] [SERVER_PORT]`
+
+replacing `[SERVER_HOST]` and `[SERVER_PORT]` with the values you set in the `conf_ring.prop` file.
 
 Now that the server is initiated, we start the Peers. For this, create a new terminal for each peer you want to run, and then, on each window, run the following command:
 
